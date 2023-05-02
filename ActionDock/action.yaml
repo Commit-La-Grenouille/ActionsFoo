@@ -12,4 +12,4 @@ inputs:
     using: 'docker'
     image: 'docker/github-actions'
     args:
-      - ${{ inputs.commit-id }}
+      - "git log -1 ${{ inputs.commit-id }} 7343dc4 | grep Author | cut -d':' -f2 >> GITHUB_OUTPUT"
