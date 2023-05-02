@@ -1,0 +1,15 @@
+name: My action through a docker image
+description: as it says on the can
+inputs:
+  commit-id:
+    description: the hash of the commit we want to check
+    required: true
+    default: '013579bdf'
+  outputs:
+    author:
+      description: who created the commit
+  runs:
+    using: 'docker'
+    image: 'docker/github-actions'
+    args:
+      - ${{ inputs.commit-id }}
