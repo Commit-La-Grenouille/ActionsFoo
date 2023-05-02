@@ -1,0 +1,25 @@
+name: GitHub Actions Demo
+
+on:
+  push:
+    branches: 
+      - main
+    paths-ignore: 
+      - .github
+    
+  pull_request:
+    branches: 
+      - main  
+    
+  schedule:
+    - cron: '15 6 * * 0'
+    
+  jobs:
+    Build:
+      runs-on: ubuntu-latest
+      steps:
+        - run: "echo 'Running due to: ${{ github.event_name }}'"
+        - run: "echo 'Currently referencing branch ${{ github.ref }}'"
+        - uses: actions/checkout@v3
+        - run: "ls -l"
+  
