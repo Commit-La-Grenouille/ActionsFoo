@@ -12,6 +12,11 @@ on:
       - main  
 
   workflow_dispatch:
+    inputs:
+      env:
+        description: 'Target env to deploy to'
+        type: environment
+        required: true
 
   schedule:
     - cron: '15 6 * * 0'
@@ -24,4 +29,45 @@ jobs:
       - run: "echo 'Currently referencing branch ${{ github.ref }}'"
       - uses: actions/checkout@v3
       - run: "ls -l"
+      
+  Test:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    needs: Build
+    environment: Test
+    steps:
+      - run: echo "🧪 Testing..."
   
+  UAT:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    needs: Build
+    environment: UAT
+    steps:
+      - run: |
+          echo "🧪 Testing..."
+          sleep 15
+          
+  Prod:
+    runs-on: ubuntu-atest
+    needs: [Test, UAT]
+    environment:
+      name: Prod
+      url: https://writeabout.net
+    if: github.event.inputs.environment == 'Production'
+    steps:
+      - run: |
+          echo "🚀 Step 1..."
+          sleep 10
+      - run: |
+          echo "🚀 Step 2..."
+          sleep 10
+      - run: |
+          echo "🚀 Step 3..."
+          sleep 10
+      - run: |
+          echo "🚀 Step 4..."
+          sleep 10
+      - run: |
+          echo "🚀 Step 5..."
+          sleep 10
